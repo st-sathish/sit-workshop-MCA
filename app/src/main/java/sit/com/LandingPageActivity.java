@@ -29,9 +29,10 @@ public class LandingPageActivity extends AppCompatActivity {
     }
 
     public void switchFragment() {
-       CalculatorFragment calculatorFragment = CalculatorFragment.newInstance("Calculator", "");
+       CalculatorFragment fragment = CalculatorFragment.newInstance("Calculator", "");
+       //WebViewFragment fragment = WebViewFragment.newInstance();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, calculatorFragment, calculatorFragment.getClass().getSimpleName());
+        fragmentTransaction.replace(R.id.fragment_container, fragment, fragment.getClass().getSimpleName());
         fragmentTransaction.commit();
     }
 }
