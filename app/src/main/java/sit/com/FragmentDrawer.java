@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ public class FragmentDrawer extends Fragment {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     ListView mListView;
+    private OnDrawerListener onDrawerListener;
 
     public FragmentDrawer() {
         //must need default constructor
@@ -27,6 +29,10 @@ public class FragmentDrawer extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    public void setOnDrawerListener(OnDrawerListener onDrawerListener) {
+        this.onDrawerListener = onDrawerListener;
     }
 
     @Nullable
@@ -45,12 +51,9 @@ public class FragmentDrawer extends Fragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                for(int i =0;i<navigationItems.length;i++) {
-                    if(position == i) {
-                        // replace the fragment in the landing page activity
-                        return;
-                    }
-                }
+                String menu = navigationItems[position];
+                mDrawerLayout.closeDrawer(Gravity.START, false);
+                onDrawerListener.onDrawerItemClick(menu, position);
             }
         });
     }
@@ -61,21 +64,16 @@ public class FragmentDrawer extends Fragment {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                //getActivity().invalidateOptionsMenu();
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-//                if (null != getActivity()) {
-//                    getActivity().invalidateOptionsMenu();
-//                }
             }
 
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
-                //toolbar.setAlpha(1 - slideOffset / 2);
             }
         };
 
@@ -87,5 +85,9 @@ public class FragmentDrawer extends Fragment {
             }
         });
 
+    }
+
+    public interface OnDrawerListener {
+        void onDrawerItemClick(String menu, int position);
     }
 }
